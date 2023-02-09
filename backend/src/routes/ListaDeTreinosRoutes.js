@@ -11,5 +11,6 @@ router.put("/:id/:done", ListaDeTreinosController.done);
 router.get("/:id", ListaDeTreinosController.show);
 router.delete("/:id", ListaDeTreinosController.delete);
 router.get("/filter/all", MacaddressValidation, ListaDeTreinosController.all);
+router.get("/filter/late", MacaddressValidation, ListaDeTreinosController.late)
 
 module.exports = router;
