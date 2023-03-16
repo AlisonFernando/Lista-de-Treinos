@@ -1,6 +1,8 @@
 const { response } = require("express");
 const ListaDeTreinosModel = require("../model/ListaDeTreinosModel");
 const current = new Date();
+const { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } = require("date-fns");
+const { status } = require("express/lib/response");
 
 class ListaDeTreinosController {
   async create(req, res) {
@@ -73,6 +75,58 @@ class ListaDeTreinosController {
     await ListaDeTreinosModel.find({
       date: { $lt: current },
       macaddress: { $in: req.body.macaddress },
+    })
+      .sort("date")
+      .then((response) => {
+        return res.status(200).json(response);
+      })
+      .catch((error) => {
+        return res.status(500).json(error);
+      });
+  }
+  async today(req, res) {
+    await ListaDeTreinosModel.find({
+      macaddress: { $in: req.body.macaddress },
+      date: { $gte: startOfDay(current), $lte: endOfDay(current) },
+    })
+      .sort("date")
+      .then((response) => {
+        return res.status(200).json(response);
+      })
+      .catch((error) => {
+        return res.status(500).json(error);
+      });
+  }
+  async week(req, res) {
+    await ListaDeTreinosModel.find({
+      macaddress: { $in: req.body.macaddress },
+      date: { $gte: startOfWeek(current), $lte: endOfWeek(current) },
+    })
+      .sort("date")
+      .then((response) => {
+        return res.status(200).json(response);
+      })
+      .catch((error) => {
+        return res.status(500).json(error);
+      });
+  }
+  async month(req, res) {
+    await ListaDeTreinosModel.find({
+      macaddress: { $in: req.body.macaddress },
+      date: { $gte: startOfMonth(current), $lte: endOfMonth(current) },
+    })
+      .sort("date")
+      .then((response) => {
+        return res.status(200).json(response);
+      })
+      .catch((error) => {
+        return res.status(500).json(error);
+      });
+  }
+  async year(req, res) {
+    await ListaDeTreinosModel.find({
+      macaddress: { $in: req.body.macaddress },
+      date: { $gte: startOfYear(current), $lte: endOfYear(current) },
     })
       .sort("date")
       .then((response) => {
